@@ -1,3 +1,7 @@
+PRESENTADO POR: 
+Natalia Rubio - 1202401
+Cristian Gonzalez - 1202248
+
 📌 Justificación de la Elección de los Hiperparámetros
 En este proyecto, se implementó un modelo de regresión lineal con TensorFlow/Keras para predecir la evolución de un paciente. Los siguientes hiperparámetros fueron seleccionados después de múltiples pruebas y ajustes manuales:
 
