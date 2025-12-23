@@ -1,0 +1,38 @@
+{
+  "name": "academia-santafe",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "next-auth": "^4.24.8",
+    "firebase": "^10.14.0",
+    "firebase-admin": "^12.6.0",
+    "framer-motion": "^11.11.7",
+    "lucide-react": "^0.451.0",
+    "react-player": "^2.16.0",
+    "date-fns": "^4.1.0",
+    "jspdf": "^2.5.2",
+    "qrcode": "^1.5.4",
+    "zustand": "^5.0.1",
+    "sonner": "^1.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.15"
+  }
+}

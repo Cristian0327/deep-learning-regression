@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de API Key de YouTube</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 10px;
+            display: none;
+        }
+        .result.success {
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            color: #166534;
+            display: block;
+        }
+        .result.error {
+            background: #fef2f2;
+            border: 2px solid #fca5a5;
+            color: #991b1b;
+            display: block;
+        }
+        .result.info {
+            background: #eff6ff;
+            border: 2px solid #93c5fd;
+            color: #1e40af;
+            display: block;
+        }
+        .result strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .result p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+        .loader {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .example {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #4a5568;
+        }
+        .code {
+            font-family: 'Courier New', monospace;
+            background: #2d3748;
+            color: #68d391;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔑 Verificador de API Key de YouTube</h1>
+        <p class="subtitle">Verifica que tu API key esté funcionando correctamente</p>
+
+        <div class="input-group">
+            <label for="apiKey">API Key de YouTube Data v3</label>
+            <input 
+                type="text" 
+                id="apiKey" 
+                placeholder="AIzaSyC_1234567890abcdefghijklmnopqrstuvwxyz"
+                autocomplete="off"
+            >
+            <div class="example">
+                💡 Encuentra tu API key en: <br>
+                <span class="code">Google Cloud Console → Credenciales</span>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="videoId">ID del Video de YouTube (opcional)</label>
+            <input 
+                type="text" 
+                id="videoId" 
+                placeholder="dQw4w9WgXcQ"
+                value="dQw4w9WgXcQ"
+                autocomplete="off"
+            >
+            <div class="example">
+                💡 De la URL: <span class="code">youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong></span>
+            </div>
+        </div>
+
+        <button onclick="verificarAPI()">Verificar API Key</button>
+
+        <div class="loader" id="loader"></div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        async function verificarAPI() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const videoId = document.getElementById('videoId').value.trim();
+            const resultDiv = document.getElementById('result');
+            const loader = document.getElementById('loader');
+
+            // Validación básica
+            if (!apiKey) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<strong>❌ Error</strong><p>Por favor ingresa tu API key</p>';
+                return;
+            }
+
+            // Mostrar loader
+            resultDiv.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                // Test 1: Verificar que la API key funciona
+                const testUrl = `https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId=${videoId}&key=${apiKey}`;
+                
+                const response = await fetch(testUrl);
+                const data = await response.json();
+
+                loader.style.display = 'none';
+
+                if (response.ok) {
+                    // API key funciona
+                    const captionCount = data.items?.length || 0;
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <strong>✅ ¡API Key Válida!</strong>
+                        <p>Tu API key está configurada correctamente</p>
+                        <p>Subtítulos encontrados: <strong>${captionCount}</strong></p>
+                        ${captionCount > 0 ? '<p>✨ Este video tiene subtítulos disponibles</p>' : '<p>⚠️ Este video no tiene subtítulos</p>'}
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #86efac;">
+                            <strong>Siguiente paso:</strong><br>
+                            Agrega esta API key a tu archivo <span class="code">.env.local</span>:<br>
+                            <span class="code">YOUTUBE_API_KEY=${apiKey.substring(0, 20)}...</span>
+                        </p>
+                    `;
+                } else {
+                    // Error con la API key
+                    let errorMsg = 'Error desconocido';
+                    
+                    if (data.error?.code === 403) {
+                        errorMsg = 'API key inválida o restringida. Verifica las restricciones en Google Cloud Console.';
+                    } else if (data.error?.code === 400) {
+                        errorMsg = 'API key mal formada. Verifica que la copiaste correctamente.';
+                    } else if (data.error?.message) {
+                        errorMsg = data.error.message;
+                    }
+
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <strong>❌ Error ${data.error?.code || ''}</strong>
+                        <p>${errorMsg}</p>
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #fca5a5;">
+                            <strong>Soluciones:</strong><br>
+                            1. Verifica que YouTube Data API v3 esté habilitada<br>
+                            2. Revisa las restricciones de la API key<br>
+                            3. Espera 2-3 minutos si acabas de crear la key
+                        </p>
+                    `;
+                }
+            } catch (error) {
+                loader.style.display = 'none';
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <strong>❌ Error de Conexión</strong>
+                    <p>${error.message}</p>
+                    <p>Verifica tu conexión a internet</p>
+                `;
+            }
+        }
+
+        // Permitir Enter para verificar
+        document.getElementById('apiKey').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verificarAPI();
+        });
+        document.getElementById('videoId').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verificarAPI();
+        });
+    </script>
+</body>
+</html>

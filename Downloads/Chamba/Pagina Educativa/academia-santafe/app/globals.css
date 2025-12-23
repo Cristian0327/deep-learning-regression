@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Colores Corporativos */
+  --color-primary-50: #e6e9f8;
+  --color-primary-100: #c1c9ed;
+  --color-primary-200: #99a6e1;
+  --color-primary-300: #7082d5;
+  --color-primary-400: #5168cc;
+  --color-primary-500: #1226aa;
+  --color-primary-600: #10229b;
+  --color-primary-700: #0d1d89;
+  --color-primary-800: #0a1877;
+  --color-primary-900: #051056;
+
+  --color-secondary-50: #fef4e6;
+  --color-secondary-100: #fce3c1;
+  --color-secondary-200: #fad098;
+  --color-secondary-300: #f8bd6f;
+  --color-secondary-400: #f6af50;
+  --color-secondary-500: #e87200;
+  --color-secondary-600: #d16800;
+  --color-secondary-700: #b85c00;
+  --color-secondary-800: #9f5000;
+  --color-secondary-900: #793d00;
+}
+
+@layer base {
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Cursor pointer para todos los botones */
+  button {
+    cursor: pointer;
+  }
+}
+
+/* Animaciones sutiles y fluidas */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Splash Screen - Animación estilo Ladrillera Santafé */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes typewriter {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-logo {
+  width: min(280px, 80vw);
+  max-width: 650px;
+  height: auto;
+  opacity: 0;
+  animation: 
+    logoEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards,
+    logoFadeOut 0.5s ease-out 0.9s forwards;
+}
+
+@media (min-width: 640px) {
+  .splash-logo {
+    width: min(450px, 80vw);
+  }
+}
+
+@media (min-width: 1024px) {
+  .splash-logo {
+    width: 650px;
+  }
+}
+
+@keyframes logoEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(30px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes logoFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes splash-fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.splash-screen {
+  animation: splash-fadeout 0.3s ease-out 1.5s forwards;
+}
+
+@keyframes splash-fadeout {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.splash-screen {
+  animation: splash-fadeout 0.6s ease-out 2.5s forwards;
+}
+
+/* Animación suave de iconos al hover */
+@keyframes icon-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.05);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-slide-in {
+  animation: slide-in 1s ease-out;
+}
+
+/* Animaciones de iconos sincronizadas con el contenedor */
+.icon-container {
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.icon-animate {
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Cuando el grupo hace hover, el contenedor y el icono se animan juntos */
+.group:hover .icon-container {
+  transform: scale(1.1);
+}
+
+.group:hover .icon-animate {
+  animation: icon-float 1.5s ease-in-out infinite;
+}
+
+/* Scroll reveal - animación más suave */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-xl active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-500 hover:bg-secondary-600 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-xl active:scale-95;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-lg active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all duration-200;
+  }
+}
+

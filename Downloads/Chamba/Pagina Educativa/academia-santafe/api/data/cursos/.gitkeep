@@ -1,0 +1,10 @@
+# Carpeta de datos para cursos
+# Los archivos JSON se guardan aquí automáticamente
+
+# NO borrar esta carpeta
+# Para hacer backup: copiar todo el contenido
+
+## Estructura:
+# curso-123.json
+# curso-456.json
+# etc.
